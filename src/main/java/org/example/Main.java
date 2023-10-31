@@ -1,6 +1,8 @@
 package org.example;
 
 import org.example.model.Product;
+import org.example.model.ProductDAO;
+import org.example.util.JPAUtil;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -15,12 +17,12 @@ public class Main {
         celular.setDescription("Azul e bonito");
         celular.setPrice(new BigDecimal("800"));
 
-        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("loja");
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        EntityManager entityManager = JPAUtil.getEntityManagerFactory();
+        ProductDAO productDAO = new ProductDAO(entityManager);
 
         entityManager.getTransaction().begin();
-
-        entityManager.persist(celular); // Inserir/persistir dados no banco de dados
+        productDAO.cadastar(celular);
         entityManager.getTransaction().commit();
+        entityManager.close();
     }
 }
